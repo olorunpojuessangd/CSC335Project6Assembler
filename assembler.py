@@ -28,6 +28,19 @@ def main():
     with open(input_path, "r") as f:
         raw_lines = f.readlines()
 
+    # Process the assembly code
+        cleaned = clean_lines(raw_lines)
+        print(f"Cleaned {len(raw_lines)} lines to {len(cleaned)} instructions")
+
+    # TODO: Next commits will add symbol table and translation
+
+    # Write output (empty for now)
+        os.makedirs("output", exist_ok=True)
+        with open(output_path, "w") as f:
+            f.write("")  # Placeholder - will fill with binary later
+
+        print(f"Assembler complete. Output written to {output_path}")
+
 
 if __name__ == "__main__":
     main()
