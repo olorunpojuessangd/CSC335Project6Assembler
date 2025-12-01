@@ -14,4 +14,4 @@ A Python implementation of a two-pass assembler for the Hack computer platform (
 
 ## References
 - [Project spec](https://drive.google.com/file/d/1CITliwTJzq19ibBF5EeuNBZ3MJ01dKoI/view)
-- [Nand2Tetris reference solution](lhttps://itslevannah.github.io/nand2tetris/docs/assembler.html)
+- [Nand2Tetris reference solution](https://itslevannah.github.io/nand2tetris/docs/assembler.html)
