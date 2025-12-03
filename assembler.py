@@ -8,11 +8,7 @@ import sys
 
 
 def main():
-    """
-    Main entry point for the assembler.
-    Reads .asm from test_cases/, writes .hack to output/.
-    """
-    # Currently using a hard coded test file
+    # Hardcoded test file for now
     input_filename = "Max1.asm"
     input_path = os.path.join("test_cases", input_filename)
 
@@ -20,26 +16,29 @@ def main():
         print(f"Error: {input_path} not found. Please add test files to test_cases/")
         sys.exit(1)
 
-    # Setup for the output path
     output_filename = input_filename.replace(".asm", ".hack")
     output_path = os.path.join("output", output_filename)
 
-    # Read input file
     with open(input_path, "r") as f:
         raw_lines = f.readlines()
 
-    # Process the assembly code
-        cleaned = clean_lines(raw_lines)
-        print(f"Cleaned {len(raw_lines)} lines to {len(cleaned)} instructions")
+    # 1) Clean lines
+    cleaned = clean_lines(raw_lines)
+    print(f"Cleaned {len(raw_lines)} lines to {len(cleaned)} instructions")
 
-    # TODO: Next commits will add symbol table and translation
+    # 2) First pass: build symbol table
+    symbol_table = first_pass_build_symbol_table(cleaned)
+    print("First pass complete. Symbols:", len(symbol_table))
 
-    # Write output (empty for now)
-        os.makedirs("output", exist_ok=True)
-        with open(output_path, "w") as f:
-            f.write("")  # Placeholder - will fill with binary later
+    # 3) Write empty output placeholder (translation next commit)
+    os.makedirs("output", exist_ok=True)
+    with open(output_path, "w") as f:
+        f.write("")
 
-        print(f"Assembler complete. Output written to {output_path}")
+    print(f"Assembler complete. Output written to {output_path}")
+
+
+
 def clean_lines(raw_lines):
     """
     Remove comments, whitespace, and empty lines from assembly code.
