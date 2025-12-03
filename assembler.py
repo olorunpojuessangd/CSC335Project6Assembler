@@ -41,6 +41,25 @@ def main():
 
         print(f"Assembler complete. Output written to {output_path}")
 
+def clean_lines(raw_lines):
+    """
+    Remove comments, whitespace, and empty lines from assembly code.
+    """
+    cleaned = []
+    for line in raw_lines:
+        # Remove everything after // (comments)
+        if "//" in line:
+            line = line.split("//")[0]
+
+        # Remove leading/trailing whitespace
+        line = line.strip()
+
+        # Only keep non-empty lines
+        if line:
+            cleaned.append(line)
+
+    return cleaned
+
 
 if __name__ == "__main__":
     main()
