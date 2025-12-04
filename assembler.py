@@ -99,5 +99,37 @@ def first_pass_build_symbol_table(clean_lines_list):
     return symbols
 
 
+def second_pass_translate(clean_lines_list, symbol_table):
+    """
+    Perform the second pass: translate A- and C-instructions to binary.
+    Label declarations are skipped.
+
+    Args:
+        clean_lines_list: list of cleaned assembly lines
+        symbol_table: dictionary of symbols to addresses
+
+    Returns:
+        List of 16-bit binary instruction strings
+    """
+    binary_instructions = []
+
+    for line in clean_lines_list:
+        # Skip label declarations like (LOOP)
+        if line.startswith("(") and line.endswith(")"):
+            continue
+
+        if line.startswith("@"):
+            # A-instruction: will handle translation in a later step
+            # Placeholder for now
+            binary = "0" * 16
+        else:
+            # C-instruction: will handle translation in a later step
+            binary = "1" * 16
+
+        binary_instructions.append(binary)
+
+    return binary_instructions
+
+
 if __name__ == "__main__":
     main()
