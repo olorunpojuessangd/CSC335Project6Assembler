@@ -30,12 +30,18 @@ def main():
     symbol_table = first_pass_build_symbol_table(cleaned)
     print("First pass complete. Symbols:", len(symbol_table))
 
-    # 3) Write empty output placeholder (translation next commit)
+    # 3) Second pass: placeholder translation
+    binary_lines = second_pass_translate(cleaned, symbol_table)
+    print(f"Second pass complete. Generated {len(binary_lines)} binary instructions")
+
+    # 4) Write output
     os.makedirs("output", exist_ok=True)
     with open(output_path, "w") as f:
-        f.write("")
+        for line in binary_lines:
+            f.write(line + "\n")
 
     print(f"Assembler complete. Output written to {output_path}")
+
 
 
 
