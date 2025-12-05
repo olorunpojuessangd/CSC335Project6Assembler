@@ -9,7 +9,7 @@ import sys
 
 def main():
     # Hardcoded test file for now
-    input_filename = "Max1.asm"
+    input_filename = "add.asm"
     input_path = os.path.join("test_cases", input_filename)
 
     if not os.path.exists(input_path):
