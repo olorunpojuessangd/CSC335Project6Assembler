@@ -183,6 +183,31 @@ def translate_a_instruction(line, symbol_table, next_variable_address):
 
     return format(address, "016b")
 
+def translate_c_instruction(line):
+    """
+    Translate a C-instruction into 16-bit binary:
+    111 a c1c2c3c4c5c6 d1d2d3 j1j2j3
+    """
+    # Split dest=comp;jump
+    if "=" in line:
+        dest_part, rest = line.split("=")
+    else:
+        dest_part, rest = None, line
+
+    if ";" in rest:
+        comp_part, jump_part = rest.split(";")
+    else:
+        comp_part, jump_part = rest, None
+
+    comp_part = comp_part.strip()
+    dest_part = dest_part.strip() if dest_part else None
+    jump_part = jump_part.strip() if jump_part else None
+
+    comp_bits = COMP_TABLE[comp_part]
+    dest_bits = DEST_TABLE[dest_part]
+    jump_bits = JUMP_TABLE[jump_part]
+
+    return "111" + comp_bits + dest_bits + jump_bits
 
 
 
@@ -200,7 +225,7 @@ def second_pass_translate(clean_lines_list, symbol_table):
         if line.startswith("@"):
             binary = translate_a_instruction(line, symbol_table, next_variable_address)
         else:
-            binary = "1" * 16  # temporary C-instruction placeholder
+            binary = translate_c_instruction(line)
 
         binary_instructions.append(binary)
 
