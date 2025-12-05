@@ -104,6 +104,21 @@ def first_pass_build_symbol_table(clean_lines_list):
 
     return symbols
 
+def translate_a_instruction(line, symbol_table):
+    """
+    Translate an A-instruction (e.g. @21) into a 16-bit binary string.
+    For now, handle only numeric constants.
+    """
+    symbol = line[1:]  # strip '@'
+    if symbol.isdigit():
+        address = int(symbol)
+    else:
+        # Symbolic A-instruction (@LOOP, @i) will be handled later
+        address = 0  # temporary placeholder
+
+    return format(address, "016b")
+
+
 
 def second_pass_translate(clean_lines_list, symbol_table):
     """
@@ -127,7 +142,7 @@ def second_pass_translate(clean_lines_list, symbol_table):
         if line.startswith("@"):
             # A-instruction: will handle translation in a later step
             # Placeholder for now
-            binary = "0" * 16
+            binary = translate_a_instruction(line, symbol_table)
         else:
             # C-instruction: will handle translation in a later step
             binary = "1" * 16
