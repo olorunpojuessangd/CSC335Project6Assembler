@@ -104,52 +104,55 @@ def first_pass_build_symbol_table(clean_lines_list):
 
     return symbols
 
-def translate_a_instruction(line, symbol_table):
+def translate_a_instruction(line, symbol_table, next_variable_address):
     """
-    Translate an A-instruction (e.g. @21) into a 16-bit binary string.
-    For now, handle only numeric constants.
+    Translate an A-instruction into 16-bit binary.
+    Handles:
+      - @number
+      - @label (predefined or from first pass)
+      - @variable (new symbols starting at address 16)
     """
     symbol = line[1:]  # strip '@'
+
+    # Case 1: literal number
     if symbol.isdigit():
         address = int(symbol)
+
+    # Case 2: in symbol table already
+    elif symbol in symbol_table:
+        address = symbol_table[symbol]
+
+    # Case 3: new variable
     else:
-        # Symbolic A-instruction (@LOOP, @i) will be handled later
-        address = 0  # temporary placeholder
+        symbol_table[symbol] = next_variable_address[0]
+        address = next_variable_address[0]
+        next_variable_address[0] += 1
 
     return format(address, "016b")
 
 
 
+
 def second_pass_translate(clean_lines_list, symbol_table):
     """
-    Perform the second pass: translate A- and C-instructions to binary.
-    Label declarations are skipped.
-
-    Args:
-        clean_lines_list: list of cleaned assembly lines
-        symbol_table: dictionary of symbols to addresses
-
-    Returns:
-        List of 16-bit binary instruction strings
+    Second pass: translate A- and C-instructions to binary.
     """
     binary_instructions = []
+    next_variable_address = [16]  # next free RAM address for variables
 
     for line in clean_lines_list:
-        # Skip label declarations like (LOOP)
         if line.startswith("(") and line.endswith(")"):
             continue
 
         if line.startswith("@"):
-            # A-instruction: will handle translation in a later step
-            # Placeholder for now
-            binary = translate_a_instruction(line, symbol_table)
+            binary = translate_a_instruction(line, symbol_table, next_variable_address)
         else:
-            # C-instruction: will handle translation in a later step
-            binary = "1" * 16
+            binary = "1" * 16  # temporary C-instruction placeholder
 
         binary_instructions.append(binary)
 
     return binary_instructions
+
 
 
 if __name__ == "__main__":
