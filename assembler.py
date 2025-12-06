@@ -62,7 +62,7 @@ JUMP_TABLE = {
 
 def main():
     # Hardcoded test file for now
-    input_filename = "add.asm"
+    input_filename = "PongL.asm"
     input_path = os.path.join("test_cases", input_filename)
 
     if not os.path.exists(input_path):
@@ -124,7 +124,7 @@ def first_pass_build_symbol_table(clean_lines_list):
     Adds predefined symbols and records label definitions.
 
     Args:
-        clean_lines_list: list of cleaned assembly lines (no comments/blank lines)
+        clean_lines_list: list of cleaned assembly lines
 
     Returns:
         Dictionary mapping symbol names to numeric addresses
@@ -147,7 +147,7 @@ def first_pass_build_symbol_table(clean_lines_list):
 
     for line in clean_lines_list:
         if line.startswith("(") and line.endswith(")"):
-            # Label declaration, e.g. (LOOP)
+            # Label declaration (LOOP)
             label_name = line[1:-1]
             # Record the address of the next instruction
             symbols[label_name] = instruction_address
